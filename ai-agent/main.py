@@ -17,11 +17,11 @@ def main():
     parser.add_argument("user_prompt", type=str, help="Ask a question...")
     args = parser.parse_args()
 
-
-
+    from google.genai import types
+    messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
 
     response = client.models.generate_content(
-    model='gemini-2.5-flash', contents= args.user_prompt
+    model='gemini-2.5-flash', contents=messages
     )
     if (response.usage_metadata) == None:
         raise ValueError('No response, potential failed API request')
