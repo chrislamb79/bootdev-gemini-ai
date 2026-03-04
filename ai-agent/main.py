@@ -14,6 +14,7 @@ def main():
     client = genai.Client(api_key=api_key)
 
     parser = argparse.ArgumentParser(description="Gemini AI")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     parser.add_argument("user_prompt", type=str, help="Ask a question...")
     args = parser.parse_args()
 
@@ -23,13 +24,17 @@ def main():
     response = client.models.generate_content(
     model='gemini-2.5-flash', contents=messages
     )
+
     if (response.usage_metadata) == None:
         raise ValueError('No response, potential failed API request')
-    else:
+    
+    if (args.verbose == True):
+        print(f"User prompt: {args.user_prompt}")
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
-
-    print(response.text)
+        print(response.text)
+    else:
+        print(response.text)
         
 
 if __name__ == "__main__":
